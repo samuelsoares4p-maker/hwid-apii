@@ -2,38 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HWID Verification API</title>
+    <title>HWID Verification</title>
 </head>
 <body>
-    <h1>HWID Verification API</h1>
-    <p>This is the API endpoint for HWID verification.</p>
-    
     <script>
-        const dataUrl = 'hwid_data.json';
+        // Pega o HWID da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const hwid = urlParams.get('hwid');
         
-        async function checkHWID() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const hwid = urlParams.get('hwid');
-            
-            if (!hwid) {
-                document.body.innerHTML = 'Error: No HWID provided';
-                return;
-            }
-            
-            try {
-                const response = await fetch(dataUrl);
-                const data = await response.json();
-                
-                const status = data.hwids[hwid] || 'active';
-                document.body.innerHTML = status;
-                
-            } catch (error) {
-                document.body.innerHTML = 'active';
-            }
+        // Se nao tem HWID, retorna erro
+        if (!hwid) {
+            document.write('no_hwid');
+        } else {
+            // Busca o arquivo de dados
+            fetch('hwid_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Verifica status do HWID
+                    const status = data.hwids[hwid];
+                    if (status) {
+                        document.write(status);
+                    } else {
+                        document.write('active');
+                    }
+                })
+                .catch(error => {
+                    document.write('active');
+                });
         }
-        
-        checkHWID();
     </script>
 </body>
 </html>
