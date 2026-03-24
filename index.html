@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HWID Verification API</title>
+</head>
+<body>
+    <h1>HWID Verification API</h1>
+    <p>This is the API endpoint for HWID verification.</p>
+    
+    <script>
+        const dataUrl = 'hwid_data.json';
+        
+        async function checkHWID() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hwid = urlParams.get('hwid');
+            
+            if (!hwid) {
+                document.body.innerHTML = 'Error: No HWID provided';
+                return;
+            }
+            
+            try {
+                const response = await fetch(dataUrl);
+                const data = await response.json();
+                
+                const status = data.hwids[hwid] || 'active';
+                document.body.innerHTML = status;
+                
+            } catch (error) {
+                document.body.innerHTML = 'active';
+            }
+        }
+        
+        checkHWID();
+    </script>
+</body>
+</html>
